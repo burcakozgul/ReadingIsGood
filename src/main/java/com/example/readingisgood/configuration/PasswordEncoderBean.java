@@ -1,4 +1,4 @@
-package com.example.readingisgood.security;
+package com.example.readingisgood.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

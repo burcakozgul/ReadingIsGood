@@ -1,12 +1,14 @@
 package com.example.readingisgood.security;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -28,18 +30,21 @@ public class JwtFilterRequest extends OncePerRequestFilter {
 
         String authorizationHeader = request.getHeader("Authorization");
         String mail = null;
-        String pass = null;
         String jwtToken = null;
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwtToken = authorizationHeader.substring(7);
-            mail = jwtUtils.extractEmail(jwtToken);
+            try {
+                mail = jwtUtils.extractEmail(jwtToken);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
-        if (mail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (mail != null && jwtToken != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(mail);
             boolean isTokenValidated = jwtUtils.validateToken(jwtToken, userDetails);
             if (isTokenValidated) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    new UsernamePasswordAuthenticationToken(mail, null, new ArrayList<GrantedAuthority>());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }

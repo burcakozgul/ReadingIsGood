@@ -5,6 +5,8 @@ import com.example.readingisgood.model.Order;
 import com.example.readingisgood.service.CustomerService;
 import com.example.readingisgood.types.requests.CreateCustomerRequest;
 import com.example.readingisgood.types.responses.DefaultResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,12 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/customer")
+@Api(value = "Customer Controller Class")
 public class CustomerController {
 
     @Autowired
     CustomerService customerService;
 
     @PostMapping("/signUp")
+    @ApiOperation(value = "New Customer creating method")
     public DefaultResponse createCustomer(@RequestBody CreateCustomerRequest request) {
         DefaultResponse defaultResponse = new DefaultResponse();
         customerService.createCustomer(request);
@@ -32,6 +36,7 @@ public class CustomerController {
 
 
     @GetMapping("/{customerId}")
+    @ApiOperation(value = "Get all orders by customerId method")
     public List<Order> getAllOrdersByCustomerId(@PathVariable Long customerId, @RequestParam(defaultValue = "0") int page,
                                                 @RequestParam(defaultValue = "3") int size) {
         return customerService.getAllOrdersByCustomerId(customerId, page, size);

@@ -1,5 +1,7 @@
-package com.example.readingisgood.security;
+package com.example.readingisgood.configuration;
 
+import com.example.readingisgood.security.JwtFilterRequest;
+import com.example.readingisgood.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,13 +29,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests().antMatchers("/customer/signUp", "/auth/signIn").permitAll().anyRequest().authenticated()
+        http.csrf().disable().authorizeRequests()
+            .antMatchers("/customer/signUp", "/auth/signIn", "/v2/api-docs", "/swagger-resources/**", "swagger-ui.html", "/swagger-ui/*", "/v2/**",
+                "/v3/**")
+            .permitAll().anyRequest()
+            .authenticated()
             .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtFilterRequest, UsernamePasswordAuthenticationFilter.class);
     }
 
-    @Autowired
-    public void configurePasswordEncoder(AuthenticationManagerBuilder managerBuilder) throws Exception {
+    @Override
+    protected void configure(AuthenticationManagerBuilder managerBuilder) throws Exception {
         managerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 

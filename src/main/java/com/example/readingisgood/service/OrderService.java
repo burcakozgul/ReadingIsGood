@@ -66,7 +66,7 @@ public class OrderService {
                 throw new OrderException("Out of stock", "ERR_O4");
             }
             if (entry.getValue() < 0) {
-                throw new OrderException("You can not buy negative count book", "ERR_O7");
+                throw new OrderException("You must buy more than 0 books", "ERR_O7");
             }
         }
     }
