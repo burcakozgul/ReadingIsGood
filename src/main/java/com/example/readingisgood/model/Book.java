@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -29,5 +30,7 @@ public class Book {
     private LocalDateTime publicationDate;
     private int stockNumber;
     private BookType type;
-    private float price;
+    private double price;
+    @Version
+    private Long version;
 }

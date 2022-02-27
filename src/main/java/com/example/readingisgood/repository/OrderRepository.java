@@ -14,6 +14,9 @@ public interface OrderRepository extends MongoRepository<Order, Long> {
 
     Page<Order> findOrdersByCustomerId(Long customerId, Pageable pageable);
 
-    @Query("{$and : [{'startDate': {$gte: ?0}}, {'endDate': {$lte: ?1}}] }")
-    List<Order> findOrdersBetweenTwoDates(LocalDateTime startDate, LocalDateTime endDate);
+    @Query("{'startDate': {$gte: ?0}}, {'endDate': {$lte: ?1}}")
+    List<Order> findOrdersByBetweenTwoDates(LocalDateTime startDate, LocalDateTime endDate);
+
+    @Query("{'orderStatus' : 'DELIVERED' , 'customerId' : ?0 , 'endDate' : { $gte: ?1, $lte: ?2 } }")
+    List<Order> findByCustomerIdAndDateBetween(Long customerId, LocalDateTime from, LocalDateTime to);
 }

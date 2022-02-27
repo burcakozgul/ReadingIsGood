@@ -66,7 +66,7 @@ public class OrderService {
                 throw new OrderException("Out of stock", "ERR_O4");
             }
             if (entry.getValue() < 0) {
-                throw new OrderException("You can not buy -1 book", "ERR_O7");
+                throw new OrderException("You can not buy negative count book", "ERR_O7");
             }
         }
     }
@@ -95,8 +95,8 @@ public class OrderService {
         }
     }
 
-    public List<Order> getOrdersBetweenDates(GetOrdersBetweenDatesRequest request) { //TODO buna bak
-        List<Order> orderList = orderRepository.findOrdersBetweenTwoDates(request.getStartDate(), request.getEndDate());
+    public List<Order> getOrdersBetweenDates(GetOrdersBetweenDatesRequest request) {
+        List<Order> orderList = orderRepository.findOrdersByBetweenTwoDates(request.getStartDate(), request.getEndDate());
         if (orderList.isEmpty()) {
             throw new OrderException("Does not have order between two dates", "ERR_06");
         }

@@ -22,5 +22,5 @@ public class CreateBookRequest {
     private LocalDateTime publicationDate;
     private int stockNumber;
     private BookType type;
-    private float price;
+    private double price;
 }

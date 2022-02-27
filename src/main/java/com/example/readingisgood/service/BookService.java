@@ -35,7 +35,7 @@ public class BookService {
         bookRepository.save(newBook);
     }
 
-    public void addStock(Long bookId, int number) throws BookException {
+    public void addBookStock(Long bookId, int number) throws BookException {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new BookException("Book does not exist", "ERR_B2"));
         int stockNumber = book.getStockNumber();
         book.setStockNumber(stockNumber + number);

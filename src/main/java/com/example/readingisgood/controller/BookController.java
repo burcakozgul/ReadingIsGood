@@ -36,9 +36,9 @@ public class BookController {
     }
 
     @PutMapping("/stock/{bookId}")
-    public DefaultResponse addStock(@PathVariable Long bookId, @RequestParam(required = true) int number) throws BookException {
+    public DefaultResponse addBokStock(@PathVariable Long bookId, @RequestParam(required = true) int number) throws BookException {
         DefaultResponse defaultResponse = new DefaultResponse();
-        bookService.addStock(bookId, number);
+        bookService.addBookStock(bookId, number);
         defaultResponse.setSuccess(true);
         defaultResponse.setMessage("Book stock successfully updated");
         return defaultResponse;

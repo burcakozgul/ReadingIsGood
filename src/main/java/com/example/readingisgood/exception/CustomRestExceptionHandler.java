@@ -41,6 +41,14 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler({StatisticsException.class})
+    public ResponseEntity<Object> handleApiException(final StatisticsException ex) {
+        final ApiError apiError;
+
+        apiError = createApiError(ex.getErrorCode(), ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
     private ApiError createApiError(String errorCode, String message) {
         return new ApiError(message, errorCode);
     }

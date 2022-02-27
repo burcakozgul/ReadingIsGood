@@ -1,7 +1,5 @@
-package com.example.readingisgood.service;
+package com.example.readingisgood.controller;
 
-import java.util.ArrayList;
-import com.example.readingisgood.exception.AuthException;
 import com.example.readingisgood.security.JwtUtils;
 import com.example.readingisgood.security.UserDetailsServiceImpl;
 import com.example.readingisgood.types.requests.SignInRequest;
@@ -32,11 +30,7 @@ public class AuthController {
 
     @PostMapping("/signIn")
     public String signIn(@RequestBody SignInRequest request) {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getMail(), request.getPassword(), new ArrayList<>()));
-        } catch (Exception e) {
-            throw new AuthException("Authentication Error!","ERR_A1");
-        }
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getMail(), request.getPassword()));
         return jwtUtils.generateToken(userDetailsService.loadUserByUsername(request.getMail()));
     }
 }
