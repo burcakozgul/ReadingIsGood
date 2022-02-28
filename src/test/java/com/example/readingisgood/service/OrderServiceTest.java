@@ -9,12 +9,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import com.example.readingisgood.exception.OrderException;
 import com.example.readingisgood.repository.BookRepository;
-import com.example.readingisgood.repository.UserRepository;
 import com.example.readingisgood.repository.OrderRepository;
+import com.example.readingisgood.repository.UserRepository;
 import com.example.readingisgood.security.JwtUtils;
 import com.example.readingisgood.service.data.BookServiceTestData;
-import com.example.readingisgood.service.data.UserServiceTestData;
 import com.example.readingisgood.service.data.OrderServiceTestData;
+import com.example.readingisgood.service.data.UserServiceTestData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OrderServiceTest {
@@ -85,7 +84,8 @@ class OrderServiceTest {
         doReturn(UserServiceTestData.get_User2()).when(userRepository).findUserByMail(any());
         doReturn(OrderServiceTestData.get_DeliveredOrder()).when(orderRepository).findById(any());
         OrderException exception =
-            assertThrows(OrderException.class, () -> orderService.updateOrderStatus(OrderServiceTestData.get_UpdateOrderStatusRequest(), "efesf323e323r"));
+            assertThrows(OrderException.class,
+                () -> orderService.updateOrderStatus(OrderServiceTestData.get_UpdateOrderStatusRequest(), "efesf323e323r"));
 
         assertEquals(expectedResult, exception.getMessage());
     }

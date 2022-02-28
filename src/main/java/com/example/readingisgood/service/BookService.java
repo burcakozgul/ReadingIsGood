@@ -64,7 +64,7 @@ public class BookService {
 
     private void checkRole(String token) {
         String mail = jwtUtils.getMail(token.substring(7));
-        if (!userRepository.findUserByMail(mail).getRoles().contains("2")){
+        if (!userRepository.findUserByMail(mail).getRoles().contains("2")) {
             throw new BookException("You don't have permission", "ERR_B4");
         }
     }

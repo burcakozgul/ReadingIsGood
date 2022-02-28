@@ -9,6 +9,7 @@ import com.example.readingisgood.types.requests.GetOrdersBetweenDatesRequest;
 import com.example.readingisgood.types.requests.UpdateOrderStatusRequest;
 import com.example.readingisgood.types.responses.DefaultResponse;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,7 @@ public class OrderController {
 
     @PostMapping
     @ApiOperation(value = "New Order creating method")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public DefaultResponse createOrder(@RequestBody CreateOrderRequest request) throws OrderException {
         DefaultResponse defaultResponse = new DefaultResponse();
         orderService.createOrder(request);
@@ -40,12 +42,14 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     @ApiOperation(value = "Get order by orderId method")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public Order getOrderById(@PathVariable Long orderId) {
         return orderService.getOrderById(orderId);
     }
 
     @PutMapping("/orderStatus")
     @ApiOperation(value = "Update order by orderId and status method")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public DefaultResponse updateOrderStatus(@RequestBody UpdateOrderStatusRequest request, @RequestHeader("Authorization") String token) {
         DefaultResponse defaultResponse = new DefaultResponse();
         orderService.updateOrderStatus(request, token);
@@ -56,6 +60,7 @@ public class OrderController {
 
     @GetMapping("/ordersBetweenDates")
     @ApiOperation(value = "Get orders between two dates method")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public List<Order> getOrdersBetweenDates(@RequestBody GetOrdersBetweenDatesRequest request) {
         return orderService.getOrdersBetweenDates(request);
     }

@@ -6,6 +6,7 @@ import com.example.readingisgood.service.UserService;
 import com.example.readingisgood.types.requests.CreateUserRequest;
 import com.example.readingisgood.types.responses.DefaultResponse;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +38,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     @ApiOperation(value = "Get all orders by userId method")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public List<Order> getAllOrdersByUserId(@PathVariable Long userId, @RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "3") int size) {
         return userService.getAllOrdersByUserId(userId, page, size);

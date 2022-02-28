@@ -43,11 +43,11 @@ public class UserServiceTestData {
             .userStatus(UserStatus.ACTIVE)
             .createdDate(LocalDateTime.of(2022, 2, 2, 0, 0))
             .mail("burcakozgul@gmail.com")
-            .roles(List.of("1","2")).build());
+            .roles(List.of("1", "2")).build());
         return user;
     }
 
-    public static User get_User2(){
+    public static User get_User2() {
         User user = User.builder()
             .id(1L)
             .name("elif")
@@ -55,7 +55,7 @@ public class UserServiceTestData {
             .userStatus(UserStatus.ACTIVE)
             .createdDate(LocalDateTime.of(2022, 2, 2, 0, 0))
             .mail("burcakozgul@gmail.com")
-            .roles(List.of("1","2")).build();
+            .roles(List.of("1", "2")).build();
         return user;
     }
 

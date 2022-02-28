@@ -51,7 +51,8 @@ class BookServiceTest {
         String expectedResult = "Book exist";
         doReturn(new Book()).when(bookRepository).findByIsbnNumber(any());
         doReturn(UserServiceTestData.get_User2()).when(userRepository).findUserByMail(any());
-        BookException exception = assertThrows(BookException.class, () -> bookService.createBook(BookServiceTestData.get_CreateBookRequest(),"efesfe3243432r42" ));
+        BookException exception =
+            assertThrows(BookException.class, () -> bookService.createBook(BookServiceTestData.get_CreateBookRequest(), "efesfe3243432r42"));
 
         assertEquals(expectedResult, exception.getMessage());
     }
@@ -82,7 +83,7 @@ class BookServiceTest {
     void addBookStock_When_BookExist_Then_Save() {
         doReturn(UserServiceTestData.get_User2()).when(userRepository).findUserByMail(any());
         doReturn(BookServiceTestData.get_Book()).when(bookRepository).findById(any());
-        bookService.addBookStock(1L, 5,"efesfe3243432r42");
+        bookService.addBookStock(1L, 5, "efesfe3243432r42");
 
         verify(bookRepository, times(1)).save(any());
     }
