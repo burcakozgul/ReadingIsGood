@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,10 +20,10 @@ public class StatisticsController {
     @Autowired
     StatisticsService statisticsService;
 
-    @GetMapping("/{customerId}")
-    @ApiOperation(value = "Get monthly order statistics by customerId method")
-    public MonthlyOrderStatisticsResponse getMonthlyOrderStaticsByCustomerId(@PathVariable Long customerId, @RequestParam int month) {
-        return statisticsService.getMonthlyOrderStaticsByCustomerId(customerId, month);
+    @GetMapping("/{userId}")
+    @ApiOperation(value = "Get monthly order statistics by userId method")
+    public MonthlyOrderStatisticsResponse getMonthlyOrderStaticsByUserId(@PathVariable Long userId, @RequestParam int month, @RequestHeader("Authorization") String token) {
+        return statisticsService.getMonthlyOrderStaticsByUserId(userId, month, token);
     }
 
 }

@@ -15,7 +15,7 @@ public class OrderServiceTestData {
         Map<Long, Integer> book = new HashMap<>();
         book.put(1L, 2);
         CreateOrderRequest request = CreateOrderRequest.builder()
-            .customerId(1L)
+            .userId(1L)
             .book(book)
             .build();
         return request;
@@ -27,7 +27,7 @@ public class OrderServiceTestData {
         Optional<Order> order = Optional.ofNullable(Order.builder()
             .id(1L)
             .orderStatus(OrderStatus.DELIVERED)
-            .customerId(1L)
+            .userId(1L)
             .totalAmount(345.6)
             .startDate(LocalDateTime.now().minusHours(1))
             .endDate(LocalDateTime.now())
@@ -50,7 +50,7 @@ public class OrderServiceTestData {
         Optional<Order> order = Optional.ofNullable(Order.builder()
             .id(1L)
             .orderStatus(OrderStatus.SHIPPED)
-            .customerId(1L)
+            .userId(1L)
             .totalAmount(345.6)
             .startDate(LocalDateTime.now().minusHours(1))
             .endDate(LocalDateTime.now())

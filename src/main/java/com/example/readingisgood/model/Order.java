@@ -22,7 +22,7 @@ public class Order {
     public static final String SEQUENCE_NAME = "orders_sequence";
     @Id
     private Long id;
-    private Long customerId;
+    private Long userId;
     private Map<Long, Integer> book = new HashMap<>();
     private OrderStatus orderStatus;
     private LocalDateTime startDate;

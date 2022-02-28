@@ -2,8 +2,8 @@ package com.example.readingisgood.controller;
 
 import java.util.List;
 import com.example.readingisgood.model.Order;
-import com.example.readingisgood.service.CustomerService;
-import com.example.readingisgood.types.requests.CreateCustomerRequest;
+import com.example.readingisgood.service.UserService;
+import com.example.readingisgood.types.requests.CreateUserRequest;
 import com.example.readingisgood.types.responses.DefaultResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,28 +17,28 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/customer")
-@Api(value = "Customer Controller Class")
-public class CustomerController {
+@RequestMapping("/user")
+@Api(value = "User Controller Class")
+public class UserController {
 
     @Autowired
-    CustomerService customerService;
+    UserService userService;
 
     @PostMapping("/signUp")
-    @ApiOperation(value = "New Customer creating method")
-    public DefaultResponse createCustomer(@RequestBody CreateCustomerRequest request) {
+    @ApiOperation(value = "New User creating method")
+    public DefaultResponse createUser(@RequestBody CreateUserRequest request) {
         DefaultResponse defaultResponse = new DefaultResponse();
-        customerService.createCustomer(request);
+        userService.createUser(request);
         defaultResponse.setSuccess(true);
-        defaultResponse.setMessage("Customer successfully created");
+        defaultResponse.setMessage("User successfully created");
         return defaultResponse;
     }
 
 
-    @GetMapping("/{customerId}")
-    @ApiOperation(value = "Get all orders by customerId method")
-    public List<Order> getAllOrdersByCustomerId(@PathVariable Long customerId, @RequestParam(defaultValue = "0") int page,
-                                                @RequestParam(defaultValue = "3") int size) {
-        return customerService.getAllOrdersByCustomerId(customerId, page, size);
+    @GetMapping("/{userId}")
+    @ApiOperation(value = "Get all orders by userId method")
+    public List<Order> getAllOrdersByUserId(@PathVariable Long userId, @RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "3") int size) {
+        return userService.getAllOrdersByUserId(userId, page, size);
     }
 }

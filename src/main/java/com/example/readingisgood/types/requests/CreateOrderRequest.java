@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateOrderRequest {
-    private Long customerId;
+    private Long userId;
     private Map<Long, Integer> book = new HashMap<>();
 }

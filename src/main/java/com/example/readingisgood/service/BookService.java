@@ -7,6 +7,8 @@ import java.util.Objects;
 import com.example.readingisgood.exception.BookException;
 import com.example.readingisgood.model.Book;
 import com.example.readingisgood.repository.BookRepository;
+import com.example.readingisgood.repository.UserRepository;
+import com.example.readingisgood.security.JwtUtils;
 import com.example.readingisgood.types.requests.CreateBookRequest;
 import org.assertj.core.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,17 @@ public class BookService {
     BookRepository bookRepository;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    JwtUtils jwtUtils;
+
+    @Autowired
     SequenceGeneratorService sequenceGeneratorService;
 
-    public void createBook(CreateBookRequest request) {
+    public void createBook(CreateBookRequest request, String token) {
         validateParameters(request);
+        checkRole(token);
         Book book = bookRepository.findByIsbnNumber(request.getIsbnNumber());
         if (Objects.nonNull(book)) {
             throw new BookException("Book exist", "ERR_B1");
@@ -40,7 +49,8 @@ public class BookService {
         bookRepository.save(newBook);
     }
 
-    public void addBookStock(Long bookId, int number) throws BookException {
+    public void addBookStock(Long bookId, int number, String token) throws BookException {
+        checkRole(token);
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new BookException("Book does not exist", "ERR_B2"));
         Integer stockNumber = book.getStockNumber();
         book.setStockNumber(stockNumber + number);
@@ -50,6 +60,13 @@ public class BookService {
     public int getBookStock(Long bookId) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new BookException("Book does not exist", "ERR_B2"));
         return book.getStockNumber();
+    }
+
+    private void checkRole(String token) {
+        String mail = jwtUtils.getMail(token.substring(7));
+        if (!userRepository.findUserByMail(mail).getRoles().contains("2")){
+            throw new BookException("You don't have permission", "ERR_B4");
+        }
     }
 
     private void validateParameters(CreateBookRequest request) {

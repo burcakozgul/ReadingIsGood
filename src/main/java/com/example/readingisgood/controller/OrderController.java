@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,9 +46,9 @@ public class OrderController {
 
     @PutMapping("/orderStatus")
     @ApiOperation(value = "Update order by orderId and status method")
-    public DefaultResponse updateOrderStatus(@RequestBody UpdateOrderStatusRequest request) {
+    public DefaultResponse updateOrderStatus(@RequestBody UpdateOrderStatusRequest request, @RequestHeader("Authorization") String token) {
         DefaultResponse defaultResponse = new DefaultResponse();
-        orderService.updateOrderStatus(request);
+        orderService.updateOrderStatus(request, token);
         defaultResponse.setSuccess(true);
         defaultResponse.setMessage("Order status successfully updated");
         return defaultResponse;

@@ -1,6 +1,7 @@
 package com.example.readingisgood.controller;
 
 import com.example.readingisgood.exception.BookException;
+import com.example.readingisgood.security.JwtUtils;
 import com.example.readingisgood.service.BookService;
 import com.example.readingisgood.types.requests.CreateBookRequest;
 import com.example.readingisgood.types.responses.DefaultResponse;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,9 +28,9 @@ public class BookController {
 
     @PostMapping
     @ApiOperation(value = "New Book creating method")
-    public DefaultResponse createBook(@RequestBody CreateBookRequest request) {
+    public DefaultResponse createBook(@RequestBody CreateBookRequest request, @RequestHeader("Authorization") String token) {
         DefaultResponse defaultResponse = new DefaultResponse();
-        bookService.createBook(request);
+        bookService.createBook(request, token);
         defaultResponse.setSuccess(true);
         defaultResponse.setMessage("Book successfully created");
         return defaultResponse;
@@ -42,9 +44,9 @@ public class BookController {
 
     @PutMapping("/stock/{bookId}")
     @ApiOperation(value = "Add book stock by bookId method")
-    public DefaultResponse addBokStock(@PathVariable Long bookId, @RequestParam(required = true) int number) throws BookException {
+    public DefaultResponse addBookStock(@PathVariable Long bookId, @RequestParam(required = true) int number, @RequestHeader("Authorization") String token) throws BookException {
         DefaultResponse defaultResponse = new DefaultResponse();
-        bookService.addBookStock(bookId, number);
+        bookService.addBookStock(bookId, number, token);
         defaultResponse.setSuccess(true);
         defaultResponse.setMessage("Book stock successfully updated");
         return defaultResponse;

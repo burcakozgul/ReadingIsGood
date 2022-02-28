@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateCustomerRequest {
+public class CreateUserRequest {
 
     private String name;
     private String surname;

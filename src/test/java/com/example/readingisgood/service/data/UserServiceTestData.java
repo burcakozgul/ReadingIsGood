@@ -1,16 +1,17 @@
 package com.example.readingisgood.service.data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
-import com.example.readingisgood.model.Customer;
+import com.example.readingisgood.model.User;
 import com.example.readingisgood.types.Address;
 import com.example.readingisgood.types.CreditCard;
-import com.example.readingisgood.types.CustomerStatus;
-import com.example.readingisgood.types.requests.CreateCustomerRequest;
+import com.example.readingisgood.types.UserStatus;
+import com.example.readingisgood.types.requests.CreateUserRequest;
 
-public class CustomerServiceTestData {
+public class UserServiceTestData {
 
-    public static CreateCustomerRequest get_CreateCustomerRequest() {
+    public static CreateUserRequest get_CreateUserRequest() {
         Address address = Address.builder().city("Istanbul")
             .apartment("Menekşe")
             .street("Karanfil")
@@ -22,7 +23,7 @@ public class CustomerServiceTestData {
             .expiredMonth(5)
             .expiredYear(2024)
             .build();
-        CreateCustomerRequest request = CreateCustomerRequest.builder()
+        CreateUserRequest request = CreateUserRequest.builder()
             .name("Burcak")
             .surname("Namver")
             .mail("burcak@gmail.com")
@@ -34,15 +35,28 @@ public class CustomerServiceTestData {
         return request;
     }
 
-    public static Optional<Customer> get_Customer() {
-        Optional<Customer> customer = Optional.ofNullable(Customer.builder()
+    public static Optional<User> get_User() {
+        Optional<User> user = Optional.ofNullable(User.builder()
             .id(1L)
             .name("elif")
             .surname("ozgul")
-            .customerStatus(CustomerStatus.ACTIVE)
+            .userStatus(UserStatus.ACTIVE)
             .createdDate(LocalDateTime.of(2022, 2, 2, 0, 0))
-            .mail("test@gmail.com").build());
-        return customer;
+            .mail("burcakozgul@gmail.com")
+            .roles(List.of("1","2")).build());
+        return user;
+    }
+
+    public static User get_User2(){
+        User user = User.builder()
+            .id(1L)
+            .name("elif")
+            .surname("ozgul")
+            .userStatus(UserStatus.ACTIVE)
+            .createdDate(LocalDateTime.of(2022, 2, 2, 0, 0))
+            .mail("burcakozgul@gmail.com")
+            .roles(List.of("1","2")).build();
+        return user;
     }
 
 }

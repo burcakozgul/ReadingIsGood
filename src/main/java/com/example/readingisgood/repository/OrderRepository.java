@@ -12,11 +12,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderRepository extends MongoRepository<Order, Long> {
 
-    Page<Order> findOrdersByCustomerId(Long customerId, Pageable pageable);
+    Page<Order> findOrdersByUserId(Long userId, Pageable pageable);
 
     @Query("{'startDate': {$gte: ?0}}, {'endDate': {$lte: ?1}}")
     List<Order> findOrdersByBetweenTwoDates(LocalDateTime startDate, LocalDateTime endDate);
 
-    @Query("{'orderStatus' : 'DELIVERED' , 'customerId' : ?0 , 'endDate' : { $gte: ?1, $lte: ?2 } }")
-    List<Order> findByCustomerIdAndDateBetween(Long customerId, LocalDateTime from, LocalDateTime to);
+    @Query("{'orderStatus' : 'DELIVERED' , 'userId' : ?0 , 'endDate' : { $gte: ?1, $lte: ?2 } }")
+    List<Order> findByUserIdAndDateBetween(Long userId, LocalDateTime from, LocalDateTime to);
 }

@@ -1,11 +1,11 @@
 package com.example.readingisgood.repository;
 
-import com.example.readingisgood.model.Customer;
+import com.example.readingisgood.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CustomerRepository extends MongoRepository<Customer, Long> {
+public interface UserRepository extends MongoRepository<User, Long> {
 
-    Customer findCustomerByMail(String mail);
+    User findUserByMail(String mail);
 }

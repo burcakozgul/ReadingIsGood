@@ -14,7 +14,7 @@ public class StatisticsServiceTestData {
         Map<Long, Integer> book = new HashMap<>();
         book.put(1L, 2);
         Order order = Order.builder().id(1L)
-            .customerId(1L)
+            .userId(1L)
             .orderStatus(OrderStatus.DELIVERED)
             .startDate(LocalDateTime.of(2022, month, 1, 0, 0))
             .endDate(LocalDateTime.of(2022, month, 28, 0, 0))

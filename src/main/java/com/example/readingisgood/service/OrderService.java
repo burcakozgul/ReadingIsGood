@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import com.example.readingisgood.exception.BookException;
 import com.example.readingisgood.exception.OrderException;
 import com.example.readingisgood.model.Book;
 import com.example.readingisgood.model.Order;
 import com.example.readingisgood.repository.BookRepository;
-import com.example.readingisgood.repository.CustomerRepository;
 import com.example.readingisgood.repository.OrderRepository;
+import com.example.readingisgood.repository.UserRepository;
+import com.example.readingisgood.security.JwtUtils;
 import com.example.readingisgood.types.OrderStatus;
 import com.example.readingisgood.types.requests.CreateOrderRequest;
 import com.example.readingisgood.types.requests.GetOrdersBetweenDatesRequest;
@@ -25,7 +27,7 @@ public class OrderService {
     OrderRepository orderRepository;
 
     @Autowired
-    CustomerRepository customerRepository;
+    UserRepository userRepository;
 
     @Autowired
     BookRepository bookRepository;
@@ -33,16 +35,19 @@ public class OrderService {
     @Autowired
     SequenceGeneratorService sequenceGeneratorService;
 
+    @Autowired
+    JwtUtils jwtUtils;
+
     public void createOrder(CreateOrderRequest request) throws OrderException {
         validateParameters(request);
-        customerRepository.findById(request.getCustomerId()).orElseThrow(() -> new OrderException("Customer does not exist", "ERR_O1"));
+        userRepository.findById(request.getUserId()).orElseThrow(() -> new OrderException("User does not exist", "ERR_O1"));
         for (Long book : request.getBook().keySet()) {
             bookRepository.findById(book).orElseThrow(() -> new OrderException("Book does not exist", "ERR_O2"));
         }
         checkStock(request.getBook());
         double totalAmount = sumPrices(request.getBook());
         Order order = Order.builder().id(sequenceGeneratorService.generateSequence(Order.SEQUENCE_NAME))
-            .customerId(request.getCustomerId())
+            .userId(request.getUserId())
             .book(request.getBook())
             .orderStatus(OrderStatus.APPROVED)
             .startDate(LocalDateTime.now())
@@ -85,7 +90,8 @@ public class OrderService {
     }
 
 
-    public void updateOrderStatus(UpdateOrderStatusRequest request) {
+    public void updateOrderStatus(UpdateOrderStatusRequest request, String token) {
+        checkRole(token);
         Order order = orderRepository.findById(request.getOrderId()).orElseThrow(() -> new OrderException("Order does not exist", "ERR_O3"));
         if (OrderStatus.DELIVERED.equals(order.getOrderStatus()) || OrderStatus.CANCELED.equals(order.getOrderStatus())) {
             throw new OrderException("Order status can not change", "ERR_O5");
@@ -106,10 +112,17 @@ public class OrderService {
         return orderList;
     }
 
+    private void checkRole(String token) {
+        String mail = jwtUtils.getMail(token.substring(7));
+        if (!userRepository.findUserByMail(mail).getRoles().contains("2")){
+            throw new BookException("You don't have permission", "ERR_B4");
+        }
+    }
+
     private void validateParameters(CreateOrderRequest request) {
         List<String> fieldName = new ArrayList<>();
-        if (request.getCustomerId() == null) {
-            fieldName.add("customerId");
+        if (request.getUserId() == null) {
+            fieldName.add("userId");
         }
         if (request.getBook().isEmpty()) {
             fieldName.add("book");

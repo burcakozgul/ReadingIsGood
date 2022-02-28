@@ -9,8 +9,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({CustomerException.class})
-    public ResponseEntity<Object> handleApiException(final CustomerException ex) {
+    @ExceptionHandler({UserException.class})
+    public ResponseEntity<Object> handleApiException(final UserException ex) {
         final ApiError apiError;
 
         apiError = createApiError(ex.getErrorCode(), ex.getMessage());

@@ -4,9 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doReturn;
 import java.util.stream.Stream;
-import com.example.readingisgood.repository.CustomerRepository;
+import com.example.readingisgood.repository.UserRepository;
 import com.example.readingisgood.repository.OrderRepository;
-import com.example.readingisgood.service.data.CustomerServiceTestData;
+import com.example.readingisgood.security.JwtUtils;
+import com.example.readingisgood.service.data.UserServiceTestData;
 import com.example.readingisgood.service.data.StatisticsServiceTestData;
 import com.example.readingisgood.types.responses.MonthlyOrderStatisticsResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,9 +30,12 @@ public class StatisticsServiceTest {
     OrderRepository orderRepository;
 
     @Mock
-    CustomerRepository customerRepository;
+    UserRepository userRepository;
 
-    private static Stream<Arguments> argument_getMonthlyOrderStaticsByCustomerId() {
+    @Mock
+    JwtUtils jwtUtils;
+
+    private static Stream<Arguments> argument_getMonthlyOrderStaticsByUserId() {
         return Stream.of(Arguments.of(1),
             Arguments.of(2),
             Arguments.of(3),
@@ -52,14 +56,15 @@ public class StatisticsServiceTest {
     }
 
     @ParameterizedTest(name = "#{index}- arguments={arguments}")
-    @MethodSource("argument_getMonthlyOrderStaticsByCustomerId")
-    @DisplayName("Test getMonthlyOrderStaticsByCustomerId.")
-    void getMonthlyOrderStaticsByCustomerId(int month) {
+    @MethodSource("argument_getMonthlyOrderStaticsByUserId")
+    @DisplayName("Test getMonthlyOrderStaticsByUserId.")
+    void getMonthlyOrderStaticsByUserId(int month) {
         double totalAmount = 500;
-        doReturn(CustomerServiceTestData.get_Customer()).when(customerRepository).findById(any());
-        doReturn(StatisticsServiceTestData.get_OrderList(month)).when(orderRepository).findByCustomerIdAndDateBetween(any(), any(), any());
+        doReturn(UserServiceTestData.get_User2()).when(userRepository).findUserByMail(any());
+        doReturn(UserServiceTestData.get_User()).when(userRepository).findById(any());
+        doReturn(StatisticsServiceTestData.get_OrderList(month)).when(orderRepository).findByUserIdAndDateBetween(any(), any(), any());
 
-        MonthlyOrderStatisticsResponse response = statisticsService.getMonthlyOrderStaticsByCustomerId(1L, month);
+        MonthlyOrderStatisticsResponse response = statisticsService.getMonthlyOrderStaticsByUserId(1L, month, "efesf323e323r");
         assertEquals(totalAmount, response.getTotalAmount());
     }
 }

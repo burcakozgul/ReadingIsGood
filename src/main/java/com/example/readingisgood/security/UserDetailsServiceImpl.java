@@ -1,10 +1,9 @@
 package com.example.readingisgood.security;
 
 import java.util.ArrayList;
-import com.example.readingisgood.model.Customer;
-import com.example.readingisgood.repository.CustomerRepository;
+import com.example.readingisgood.model.User;
+import com.example.readingisgood.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,14 +16,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String mail) throws UsernameNotFoundException {
-        Customer customer = customerRepository.findCustomerByMail(mail);
-        if (customer == null) {
-            throw new UsernameNotFoundException("Customer not found");
+        User user = userRepository.findUserByMail(mail);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
         }
-        return new User(customer.getMail(), customer.getPassword(), new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(user.getMail(), user.getPassword(), new ArrayList<>());
     }
 }
