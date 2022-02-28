@@ -1,10 +1,14 @@
 package com.example.readingisgood.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import com.example.readingisgood.exception.BookException;
 import com.example.readingisgood.model.Book;
 import com.example.readingisgood.repository.BookRepository;
 import com.example.readingisgood.types.requests.CreateBookRequest;
+import org.assertj.core.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,7 @@ public class BookService {
     SequenceGeneratorService sequenceGeneratorService;
 
     public void createBook(CreateBookRequest request) {
+        validateParameters(request);
         Book book = bookRepository.findByIsbnNumber(request.getIsbnNumber());
         if (Objects.nonNull(book)) {
             throw new BookException("Book exist", "ERR_B1");
@@ -37,7 +42,7 @@ public class BookService {
 
     public void addBookStock(Long bookId, int number) throws BookException {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new BookException("Book does not exist", "ERR_B2"));
-        int stockNumber = book.getStockNumber();
+        Integer stockNumber = book.getStockNumber();
         book.setStockNumber(stockNumber + number);
         bookRepository.save(book);
     }
@@ -45,5 +50,24 @@ public class BookService {
     public int getBookStock(Long bookId) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new BookException("Book does not exist", "ERR_B2"));
         return book.getStockNumber();
+    }
+
+    private void validateParameters(CreateBookRequest request) {
+        List<String> fieldName = new ArrayList<>();
+        if (Strings.isNullOrEmpty(request.getIsbnNumber())) {
+            fieldName.add("isbnNumber");
+        }
+        if (request.getStockNumber() == null) {
+            fieldName.add("stockNumber");
+        }
+        if (Strings.isNullOrEmpty(request.getName())) {
+            fieldName.add("name");
+        }
+        if (Strings.isNullOrEmpty(request.getAuthor())) {
+            fieldName.add("author");
+        }
+        if (!fieldName.isEmpty()) {
+            throw new BookException("Missing parameters: " + Arrays.toString(fieldName.toArray()), "ERR_B3");
+        }
     }
 }

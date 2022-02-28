@@ -20,7 +20,7 @@ public class CreateBookRequest {
     private int totalPage;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime publicationDate;
-    private int stockNumber;
+    private Integer stockNumber;
     private BookType type;
     private double price;
 }

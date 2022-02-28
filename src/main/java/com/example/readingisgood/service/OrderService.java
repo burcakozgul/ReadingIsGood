@@ -1,6 +1,8 @@
 package com.example.readingisgood.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import com.example.readingisgood.exception.OrderException;
@@ -32,6 +34,7 @@ public class OrderService {
     SequenceGeneratorService sequenceGeneratorService;
 
     public void createOrder(CreateOrderRequest request) throws OrderException {
+        validateParameters(request);
         customerRepository.findById(request.getCustomerId()).orElseThrow(() -> new OrderException("Customer does not exist", "ERR_O1"));
         for (Long book : request.getBook().keySet()) {
             bookRepository.findById(book).orElseThrow(() -> new OrderException("Book does not exist", "ERR_O2"));
@@ -74,8 +77,8 @@ public class OrderService {
     private void updateStock(Map<Long, Integer> books) {
         for (Map.Entry<Long, Integer> entry : books.entrySet()) {
             Book book1 = bookRepository.findById(entry.getKey()).get();
-            int boughtAmount = entry.getValue();
-            int stockNumber = book1.getStockNumber();
+            Integer boughtAmount = entry.getValue();
+            Integer stockNumber = book1.getStockNumber();
             book1.setStockNumber(stockNumber - boughtAmount);
             bookRepository.save(book1);
         }
@@ -101,5 +104,18 @@ public class OrderService {
             throw new OrderException("Does not have order between two dates", "ERR_06");
         }
         return orderList;
+    }
+
+    private void validateParameters(CreateOrderRequest request) {
+        List<String> fieldName = new ArrayList<>();
+        if (request.getCustomerId() == null) {
+            fieldName.add("customerId");
+        }
+        if (request.getBook().isEmpty()) {
+            fieldName.add("book");
+        }
+        if (!fieldName.isEmpty()) {
+            throw new OrderException("Missing parameters: " + Arrays.toString(fieldName.toArray()), "ERR_O8");
+        }
     }
 }

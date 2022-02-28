@@ -1,6 +1,8 @@
 package com.example.readingisgood.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import com.example.readingisgood.exception.CustomerException;
@@ -10,6 +12,7 @@ import com.example.readingisgood.repository.CustomerRepository;
 import com.example.readingisgood.repository.OrderRepository;
 import com.example.readingisgood.types.CustomerStatus;
 import com.example.readingisgood.types.requests.CreateCustomerRequest;
+import org.assertj.core.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +36,7 @@ public class CustomerService {
     private PasswordEncoder passwordEncoder;
 
     public void createCustomer(CreateCustomerRequest request) {
+        validateParameters(request);
         Customer customer = customerRepository.findCustomerByMail(request.getMail());
         if (Objects.nonNull(customer)) {
             throw new CustomerException("Customer exist", "ERR_C1");
@@ -58,5 +62,27 @@ public class CustomerService {
             throw new CustomerException("Customer does not have order", "ERR_C3");
         }
         return orderPage.getContent();
+    }
+
+    private void validateParameters(CreateCustomerRequest request) {
+        List<String> fieldName = new ArrayList<>();
+        if (Strings.isNullOrEmpty(request.getName())) {
+            fieldName.add("name");
+        }
+        if (Strings.isNullOrEmpty(request.getPassword())) {
+            fieldName.add("password");
+        }
+        if (Strings.isNullOrEmpty(request.getMail())) {
+            fieldName.add("mail");
+        }
+        if (request.getCreditCard() == null) {
+            fieldName.add("creditCard");
+        }
+        if (request.getAddress() == null) {
+            fieldName.add("address");
+        }
+        if (!fieldName.isEmpty()) {
+            throw new CustomerException("Missing parameters: " + Arrays.toString(fieldName.toArray()), "ERR_C4");
+        }
     }
 }
